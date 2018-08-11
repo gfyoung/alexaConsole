@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 7
+  },
+  "rules": {
+    "no-var": ["error"],
+    "indent": ["error", 4],
+    "max-len": ["error", 80],
+    "prefer-const": ["error"],
+    "semi": ["error", "always"],
+    "eqeqeq": ["error", "smart"],
+    "quotes": ["error", "double"]
+  }
+}

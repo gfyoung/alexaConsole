@@ -18,7 +18,7 @@ but for some reason, that is not the case.
 # Publication
 
 This extension is a little hacky admittedly and does not have the best of UI.
-Thus, I have chosen to not publish this to the Chrome store until (if at all),
+Thus, I have chosen not to publish this to the Chrome store until (if ever)
 this skill reaches a state that I find is acceptable.
 
 If you would like to install this extension for your own use, please refer

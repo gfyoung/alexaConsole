@@ -1,3 +1,6 @@
+const DASH = "-";
+const EMPTY = "";
+const SPACE = " ";
 const TIMEOUT = 1000;
 const INVISIBLE = "none";
 
@@ -68,9 +71,9 @@ function getSkillStatus(skillColumns) {
  */
 function getIdFromNameAndStatus(name, status) {
     // Sanitize the name and status.
-    name = name.replace(":", "");
-    name = name.replace(" ", "-");
-    status = status.replace(" ", "-");
+    name = name.replace(":", EMPTY);
+    name = name.replace(SPACE, DASH);
+    status = status.replace(SPACE, DASH);
 
     return name.toLowerCase() + "-" + status.toLowerCase();
 }
@@ -79,53 +82,72 @@ function getIdFromNameAndStatus(name, status) {
  * Extract the skills from the DOM and store them in local storage.
  */
 function getSkills() {
-    const skillsList = [];
-    const skillTable = getSkillTable().item(0);
-    const skillElements = skillTable.children;
+    chrome.storage.sync.get("skillsMap", function(data) {
+        let skillsMap = {};
+        skillsMap = data.skillsMap || skillsMap;
 
-    // Tag all rows with unique IDs.
-    for (let i = 0; i < skillElements.length; i++) {
-        const skillElement = skillElements.item(i);
-        const skillColumns = skillElement.children;
+        const skillsList = [];
+        const skillTable = getSkillTable().item(0);
+        const skillElements = skillTable.children;
 
-        const skillName = getSkillName(skillColumns);
-        const skillStatus = getSkillStatus(skillColumns);
+        // Tag all rows with unique IDs.
+        for (let i = 0; i < skillElements.length; i++) {
+            const skillElement = skillElements.item(i);
+            const skillColumns = skillElement.children;
 
-        skillElement.id = getIdFromNameAndStatus(skillName, skillStatus);
-        console.log(skillName + " " + skillStatus);
-        skillsList.push({skillName, skillStatus});
-    }
+            const skillName = getSkillName(skillColumns);
+            const skillStatus = getSkillStatus(skillColumns);
 
-    // Store extracted skills in local storage.
-    chrome.storage.sync.set({skillsList});
+            skillElement.id = getIdFromNameAndStatus(skillName, skillStatus);
 
-    // Add message listener for when user wants to toggle visibility.
-    chrome.runtime.onMessage.addListener(
-        function(request, sender) {
-            if (sender.tab) {
-                return;
-            }
+            const displayValue = skillsMap[skillElement.id] || false;
+            skillElement.style.display = displayValue ? INVISIBLE : EMPTY;
 
-            const {skillName, skillStatus} = request;
+            skillsMap[skillElement.id] = displayValue;
+            console.log(skillName + SPACE + skillStatus);
+            skillsList.push({skillName, skillStatus, id: skillElement.id});
+        }
 
-            if (skillName === undefined || skillStatus === undefined) {
-                return;
-            }
+        // Store extracted skills in local storage.
+        chrome.storage.sync.set({skillsList, skillsMap});
 
-            // We are now (relatively) certain that we have received a message
-            // from the extension with a skill name and status fields.
-            const elementId = getIdFromNameAndStatus(skillName, skillStatus);
-            const element = document.getElementById(elementId);
+        // Add message listener for when user wants to toggle visibility.
+        chrome.runtime.onMessage.addListener(
+            function(request, sender) {
+                if (sender.tab) {
+                    return;
+                }
 
-            // There is no element tagged with that ID.
-            if (element === null) {
-                return;
-            }
+                const {skillName, skillStatus} = request;
 
-            // Toggle the visibility of the element.
-            const displayValue = element.style.display;
-            element.style.display = displayValue === INVISIBLE ? "" : INVISIBLE;
-        });
+                if (skillName === undefined || skillStatus === undefined) {
+                    return;
+                }
+
+                // We are now (relatively) certain that we have
+                // received a message from the extension with a
+                // skill name and status fields.
+                const elementId = getIdFromNameAndStatus(
+                    skillName, skillStatus);
+                const element = document.getElementById(elementId);
+
+                // There is no element tagged with that ID.
+                if (element === null) {
+                    return;
+                }
+
+                chrome.storage.sync.get("skillsMap", function(data) {
+                    // Toggle the visibility of the element.
+                    const skillsMap = data.skillsMap;
+                    const displayValue = !skillsMap[elementId];
+
+                    element.style.display = displayValue ? INVISIBLE : EMPTY;
+                    skillsMap[elementId] = displayValue;
+
+                    chrome.storage.sync.set({skillsMap});
+                });
+            });
+    });
 }
 
 idleUntilDOMLoaded();

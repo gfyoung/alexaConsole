@@ -18,3 +18,11 @@ but for some reason, that is not the case.
 This extension is a little hacky admittedly and does not have the best of UI.
 Thus, I have chosen to not publish this to the Chrome store until (if at all),
 this skill reaches a state that I find is acceptable.
+
+If you would like to install this extension for your own use, please refer
+to the following StackOverflow post below:
+
+https://stackoverflow.com/questions/24577024/install-chrome-extension-not-in-the-store
+
+Essentially, navigate to `chrome://extensions` in your browser and install an
+"unpacked extension" using the `src` directory.

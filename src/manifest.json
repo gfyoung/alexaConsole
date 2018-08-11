@@ -1,7 +1,7 @@
 {
-  "name": "Amazon Console Extension",
+  "name": "Amazon Console Spam Reducer",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "Remove Unnecessary Rows in Your Alexa Developer Console Skills Table",
   "permissions": ["activeTab", "declarativeContent", "storage"],
   "background": {
     "scripts": ["background.js"],

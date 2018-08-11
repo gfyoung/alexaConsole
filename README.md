@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/gfyoung/alexaConsole.svg?branch=master)](https://travis-ci.com/gfyoung/alexaConsole)
+
 # alexaConsole
 
 Google Chrome extension for (un)hiding unnecessary Alexa skill entries.

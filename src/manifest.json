@@ -26,7 +26,7 @@
     {
       "matches": ["https://developer.amazon.com/alexa/console/ask*"],
       "run_at": "document_start",
-      "js": ["parseDOM.js"]
+      "js": ["constants.js", "parseDOM.js"]
     }
   ],
   "manifest_version": 2

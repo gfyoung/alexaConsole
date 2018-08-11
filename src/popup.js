@@ -1,6 +1,3 @@
-const NO_DECOR = "";
-const LINE_THROUGH = "line-through";
-
 /**
  * Create an <li> element for display in the popup.
  *
@@ -44,7 +41,7 @@ function createListElement(listElement, skillsMap) {
     return node;
 }
 
-chrome.storage.sync.get(["skillsList", "skillsMap"], function(data) {
+chrome.storage.sync.get([SKILLS_LIST, SKILLS_MAP], function(data) {
     const skillList = data.skillsList;
     const skillListTag = document.getElementById("skillList");
 

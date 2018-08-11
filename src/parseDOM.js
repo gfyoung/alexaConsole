@@ -1,9 +1,3 @@
-const DASH = "-";
-const EMPTY = "";
-const SPACE = " ";
-const TIMEOUT = 1000;
-const INVISIBLE = "none";
-
 /**
  * Get the table element containing the Alexa skills.
  *
@@ -75,14 +69,14 @@ function getIdFromNameAndStatus(name, status) {
     name = name.replace(SPACE, DASH);
     status = status.replace(SPACE, DASH);
 
-    return name.toLowerCase() + "-" + status.toLowerCase();
+    return name.toLowerCase() + DASH + status.toLowerCase();
 }
 
 /**
  * Extract the skills from the DOM and store them in local storage.
  */
 function getSkills() {
-    chrome.storage.sync.get("skillsMap", function(data) {
+    chrome.storage.sync.get(SKILLS_MAP, function(data) {
         let skillsMap = {};
         skillsMap = data.skillsMap || skillsMap;
 
@@ -136,7 +130,7 @@ function getSkills() {
                     return;
                 }
 
-                chrome.storage.sync.get("skillsMap", function(data) {
+                chrome.storage.sync.get(SKILLS_MAP, function(data) {
                     // Toggle the visibility of the element.
                     const skillsMap = data.skillsMap;
                     const displayValue = !skillsMap[elementId];

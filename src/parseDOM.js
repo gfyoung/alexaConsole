@@ -23,6 +23,20 @@ function idleUntilDOMLoaded() {
         setTimeout(idleUntilDOMLoaded, TIMEOUT);
     } else {
         getSkills();
+
+        // Skills are loaded lazily, so need to detect DOM changes.
+        const MutationObserver = window.MutationObserver ||
+            window.WebKitMutationObserver;
+
+        const observer = new MutationObserver(() => {
+            console.log("New skills have been loaded. Refreshing...");
+            getSkills();
+        });
+
+        observer.observe(document, {
+            subtree: true,
+            childList: true,
+        });
     }
 }
 
